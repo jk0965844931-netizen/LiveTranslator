@@ -1,0 +1,47 @@
+name: Build Unsigned IPA
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # อนุญาตให้เรากดปุ่มสั่ง Build เองได้ด้วย
+
+jobs:
+  build:
+    name: Build iOS App
+    runs-on: macos-latest # สั่งให้ GitHub เปิดเครื่อง Mac รุ่นล่าสุดมารันงานนี้
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install XcodeGen
+        run: brew install xcodegen # ติดตั้งเครื่องมือสร้างโปรเจกต์
+
+      - name: Generate Xcode Project
+        run: xcodegen generate # สร้างไฟล์ .xcodeproj อัตโนมัติจาก project.yml
+
+      - name: Build App (Unsigned)
+        run: |
+          xcodebuild clean build \
+            -project "LiveTranslator.xcodeproj" \
+            -scheme "LiveTranslator" \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package to IPA
+        run: |
+          # สร้างโฟลเดอร์ชื่อ Payload ตามโครงสร้างมาตรฐานของไฟล์ .ipa
+          mkdir -p Payload
+          # ก๊อปปี้ไฟล์แอปที่ Build เสร็จแล้วลงไปใน Payload
+          cp -r ~/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/LiveTranslator.app Payload/
+          # บีบอัดและเปลี่ยนนามสกุลเป็น .ipa
+          zip -qr LiveTranslator.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: LiveTranslator-Unsigned-IPA
+          path: LiveTranslator.ipa

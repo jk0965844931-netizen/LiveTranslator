@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.yourname.LiveTranslator</string>
+    <key>CFBundleName</key>
+    <string>LiveTranslator</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+        <string>processing</string>
+    </array>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>แอปนี้ต้องการเข้าถึงระบบแปลภาษาเพื่อสร้างซับไตเติล</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>แอปนี้ต้องการเข้าถึงระบบเสียงเพื่อฟังเสียงจากเครื่อง</string>
+    <key>UILaunchScreen</key>
+    <dict/>
+</dict>
+</plist>
